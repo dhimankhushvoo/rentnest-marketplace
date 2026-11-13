@@ -35,17 +35,14 @@ const seedData = async () => {
     ]);
     console.log('Old collections cleared.');
 
-    // 2. Hash password for demo accounts
-    const salt = await bcrypt.genSalt(10);
-    const demoPasswordHash = await bcrypt.hash('password123', salt);
-
     // 3. Create Users (Owners, Renters, Admin)
+    // NOTE: Pass plain 'password123' so Mongoose's pre('save') hook hashes it ONCE.
     console.log('Creating users...');
     const users = await User.create([
       {
         name: 'Aarav Sharma',
         email: 'aarav@example.com',
-        password: demoPasswordHash,
+        password: 'password123',
         role: 'owner',
         phone: '+91 98765 43210',
         address: 'Indiranagar, Bengaluru, Karnataka',
@@ -53,7 +50,7 @@ const seedData = async () => {
       {
         name: 'Priya Patel',
         email: 'priya@example.com',
-        password: demoPasswordHash,
+        password: 'password123',
         role: 'owner',
         phone: '+91 98111 22334',
         address: 'Koramangala 4th Block, Bengaluru, Karnataka',
@@ -61,7 +58,7 @@ const seedData = async () => {
       {
         name: 'Vikram Sengupta',
         email: 'vikram@example.com',
-        password: demoPasswordHash,
+        password: 'password123',
         role: 'owner',
         phone: '+91 97222 33445',
         address: 'HSR Layout Sector 2, Bengaluru, Karnataka',
@@ -69,7 +66,7 @@ const seedData = async () => {
       {
         name: 'Rohan Gupta',
         email: 'rohan@example.com',
-        password: demoPasswordHash,
+        password: 'password123',
         role: 'renter',
         phone: '+91 91234 56789',
         address: 'Whitefield, Bengaluru, Karnataka',
@@ -77,15 +74,15 @@ const seedData = async () => {
       {
         name: 'Ananya Deshmukh',
         email: 'ananya@example.com',
-        password: demoPasswordHash,
+        password: 'password123',
         role: 'renter',
         phone: '+91 95432 10987',
         address: 'Jayanagar 4th Block, Bengaluru, Karnataka',
       },
       {
         name: 'Super Admin',
-        email: 'admin@rentnest.com',
-        password: demoPasswordHash,
+        email: 'admin@example.com',
+        password: 'password123',
         role: 'admin',
         phone: '+91 90000 00001',
         address: 'RentNest HQ, MG Road, Bengaluru',
