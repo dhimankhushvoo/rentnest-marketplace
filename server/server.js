@@ -72,6 +72,21 @@ app.use('/api/disputes', disputeRoutes);
 const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/admin', adminRoutes);
 
+// Cloud Database Seeding Route (One-click cloud database setup)
+const seedData = require('./seeder');
+app.get('/api/seed-database', async (req, res) => {
+  try {
+    const result = await seedData(false);
+    return res.status(200).json({
+      success: true,
+      message: 'MongoDB Atlas Cloud Database seeded successfully!',
+      data: result,
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // ============================================
 // 404 Not Found Fallback Handler
 // ============================================

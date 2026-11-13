@@ -16,10 +16,12 @@ const Dispute = require('./models/Dispute');
 dotenv.config({ path: path.join(__dirname, '.env') });
 const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/rentnest_db';
 
-const seedData = async () => {
+const seedData = async (shouldExit = true) => {
   try {
     console.log('Connecting to MongoDB at:', mongoUri);
-    await mongoose.connect(mongoUri);
+    if (mongoose.connection.readyState !== 1) {
+      await mongoose.connect(mongoUri);
+    }
     console.log('MongoDB connected successfully for seeding.');
 
     // 1. Clear existing sample data
@@ -397,21 +399,21 @@ const seedData = async () => {
     });
 
     console.log('✅ Seeding completed successfully!');
-    console.log('====================================================');
-    console.log(` Summary:`);
-    console.log(` - Users:       ${users.length} (Owners: 3, Renters: 2, Admin: 1)`);
-    console.log(` - Categories:  ${categories.length}`);
-    console.log(` - Listings:    ${items.length} high-quality items`);
-    console.log(` - Rentals:     3 (2 Completed + 1 Active)`);
-    console.log(` - Deposits:    3 escrow records`);
-    console.log(` - Reviews:     2 verified 5-star reviews`);
-    console.log('====================================================');
-
-    process.exit(0);
+    if (shouldExit) {
+      process.exit(0);
+    }
+    return { success: true, users: users.length, categories: categories.length, items: items.length };
   } catch (error) {
     console.error('❌ Seeder Error:', error);
-    process.exit(1);
+    if (shouldExit) {
+      process.exit(1);
+    }
+    throw error;
   }
 };
 
-seedData();
+module.exports = seedData;
+
+if (require.main === module) {
+  seedData(true);
+}
