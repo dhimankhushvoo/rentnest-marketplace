@@ -14,3 +14,4 @@ export const getImageUrl = (path) => {
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   return `${BACKEND_URL}${cleanPath}`;
 };
+
